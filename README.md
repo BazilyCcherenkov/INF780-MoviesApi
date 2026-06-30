@@ -86,24 +86,24 @@ http://localhost:3000/api
 
 ## Endpoints disponibles
 
-| Método | Ruta            | Descripción                        |
-|--------|-----------------|------------------------------------|
-| POST   | `/movies`       | Crear una nueva película           |
-| GET    | `/movies`       | Obtener todas las películas        |
-| GET    | `/movies/:id`   | Obtener una película por UUID      |
-| PATCH  | `/movies/:id`   | Actualizar parcialmente una película |
-| DELETE | `/movies/:id`   | Eliminar una película              |
+| Método | Ruta          | Descripción                          |
+| ------ | ------------- | ------------------------------------ |
+| POST   | `/movies`     | Crear una nueva película             |
+| GET    | `/movies`     | Obtener todas las películas          |
+| GET    | `/movies/:id` | Obtener una película por UUID        |
+| PATCH  | `/movies/:id` | Actualizar parcialmente una película |
+| DELETE | `/movies/:id` | Eliminar una película                |
 
 ### Campos de una película
 
-| Campo      | Tipo    | Requerido | Descripción                                      |
-|------------|---------|-----------|--------------------------------------------------|
-| `title`    | string  | Sí        | Título de la película (máx. 255 caracteres)      |
-| `director` | string  | Sí        | Director (máx. 150 caracteres)                   |
+| Campo      | Tipo    | Requerido | Descripción                                                                                                |
+| ---------- | ------- | --------- | ---------------------------------------------------------------------------------------------------------- |
+| `title`    | string  | Sí        | Título de la película (máx. 255 caracteres)                                                                |
+| `director` | string  | Sí        | Director (máx. 150 caracteres)                                                                             |
 | `genre`    | enum    | Sí        | Género: `action`, `comedy`, `drama`, `horror`, `sci-fi`, `thriller`, `romance`, `documentary`, `animation` |
-| `year`     | integer | Sí        | Año de estreno (1888–2030)                       |
-| `rating`   | number  | Sí        | Puntuación de 0.0 a 10.0 (un decimal)            |
-| `synopsis` | string  | No        | Sinopsis de la película                          |
+| `year`     | integer | Sí        | Año de estreno (1888–2030)                                                                                 |
+| `rating`   | number  | Sí        | Puntuación de 0.0 a 10.0 (un decimal)                                                                      |
+| `synopsis` | string  | No        | Sinopsis de la película                                                                                    |
 
 ### Ejemplo: crear una película
 
@@ -142,6 +142,30 @@ Requieren que la base de datos `movies_api_test` esté disponible (configurada e
 npm run test:e2e
 ```
 
+### Documentación de pruebas
+
+La documentación detallada de los casos de prueba se encuentra en `docs/PRUEBAS.md`. Este archivo incluye:
+
+- **Pruebas unitarias (MoviesService):** 11 casos de prueba cubriendo todos los métodos del servicio
+- **Pruebas de integración (MoviesController):** Tests con mock del servicio
+- **Pruebas E2E:** Tests completos contra la base de datos real
+
+#### Casos de prueba - MoviesService
+
+| #   | Método    | Comportamiento                                      |
+| --- | --------- | --------------------------------------------------- |
+| 1   | -         | Servicio definido                                   |
+| 2   | create()  | DTO válido crea entidad                             |
+| 3   | create()  | UUID v4 asignado automáticamente                    |
+| 4   | findAll() | Retorna array de películas                          |
+| 5   | findAll() | Array vacío si no hay datos                         |
+| 6   | findOne() | UUID existente retorna película                     |
+| 7   | findOne() | UUID inexistente lanza NotFoundException            |
+| 8   | update()  | Actualiza campos correctamente                      |
+| 9   | update()  | UUID inexistente lanza excepción antes de modificar |
+| 10  | remove()  | Elimina película existente                          |
+| 11  | remove()  | UUID inexistente lanza excepción antes de eliminar  |
+
 ## Estructura del proyecto
 
 ```
@@ -165,14 +189,14 @@ test/
 
 ## Scripts disponibles
 
-| Comando             | Descripción                                  |
-|---------------------|----------------------------------------------|
-| `npm run start`     | Inicia la aplicación                         |
-| `npm run start:dev` | Inicia en modo desarrollo con hot-reload     |
-| `npm run start:prod`| Inicia la versión compilada                  |
-| `npm run build`     | Compila el proyecto                          |
-| `npm run test`      | Ejecuta pruebas unitarias                    |
-| `npm run test:cov`  | Ejecuta pruebas con reporte de cobertura     |
-| `npm run test:e2e`  | Ejecuta pruebas end-to-end                   |
-| `npm run lint`      | Ejecuta el linter con corrección automática  |
-| `npm run format`    | Formatea el código con Prettier              |
+| Comando              | Descripción                                 |
+| -------------------- | ------------------------------------------- |
+| `npm run start`      | Inicia la aplicación                        |
+| `npm run start:dev`  | Inicia en modo desarrollo con hot-reload    |
+| `npm run start:prod` | Inicia la versión compilada                 |
+| `npm run build`      | Compila el proyecto                         |
+| `npm run test`       | Ejecuta pruebas unitarias                   |
+| `npm run test:cov`   | Ejecuta pruebas con reporte de cobertura    |
+| `npm run test:e2e`   | Ejecuta pruebas end-to-end                  |
+| `npm run lint`       | Ejecuta el linter con corrección automática |
+| `npm run format`     | Formatea el código con Prettier             |
