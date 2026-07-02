@@ -1,6 +1,6 @@
 timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
-1782958899526,161,GET /movies,200,OK,Smoke Test 1-1,text,true,,1435419,123,1,1,http://localhost:3000/movies,145,0,42
-1782958899691,86,GET /movies,200,OK,Smoke Test 1-1,text,true,,1435419,123,1,1,http://localhost:3000/movies,70,0,0
-1782958899778,78,GET /movies,200,OK,Smoke Test 1-1,text,true,,1435419,123,1,1,http://localhost:3000/movies,69,0,0
-1782958899857,81,GET /movies,200,OK,Smoke Test 1-1,text,true,,1435419,123,1,1,http://localhost:3000/movies,72,0,0
-1782958899939,83,GET /movies,200,OK,Smoke Test 1-1,text,true,,1435419,123,1,1,http://localhost:3000/movies,74,0,0
+1782961864152,204,GET /movies,200,OK,Smoke Test 1-1,text,true,,1429530,123,1,1,http://localhost:3000/movies,183,0,28
+1782961864365,105,GET /movies,200,OK,Smoke Test 1-1,text,true,,1429530,123,1,1,http://localhost:3000/movies,92,0,0
+1782961864472,92,GET /movies,200,OK,Smoke Test 1-1,text,true,,1429530,123,1,1,http://localhost:3000/movies,80,0,0
+1782961864566,121,GET /movies,200,OK,Smoke Test 1-1,text,true,,1429530,123,1,1,http://localhost:3000/movies,111,0,0
+1782961864689,160,GET /movies,200,OK,Smoke Test 1-1,text,true,,1429530,123,1,1,http://localhost:3000/movies,148,0,0
