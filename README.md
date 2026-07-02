@@ -182,6 +182,20 @@ cd jmeter/scripts && node seed.mjs && cd ../..
 cd jmeter/scripts && node extract-ids.mjs && cd ../..
 ```
 
+### Reset completo (para repetir pruebas desde cero)
+
+```bash
+cd jmeter/scripts && node reset.mjs && cd ../..
+```
+
+Este comando:
+1. Limpia todos los archivos `.jtl` y dashboards anteriores
+2. Trunca la tabla `movies` vía `psql` (vuelve a 0 registros)
+3. Vuelve a sembrar 5000 películas frescas
+4. Re-extrae los UUIDs a `jmeter/data/movie-ids.csv`
+
+> **Requisito:** El usuario de PostgreSQL (`movies_user`) debe tener permisos de escritura. La contraseña está configurada en el script como `123456`.
+
 ### Ejecución (modo no-GUI)
 
 Todos los comandos desde la raíz del proyecto:
