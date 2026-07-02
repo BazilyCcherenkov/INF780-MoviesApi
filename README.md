@@ -150,21 +150,96 @@ La documentación detallada de los casos de prueba se encuentra en `docs/PRUEBAS
 - **Pruebas de integración (MoviesController):** Tests con mock del servicio
 - **Pruebas E2E:** Tests completos contra la base de datos real
 
-#### Casos de prueba - MoviesService
+## Pruebas de rendimiento con JMeter
 
-| #   | Método    | Comportamiento                                      |
-| --- | --------- | --------------------------------------------------- |
-| 1   | -         | Servicio definido                                   |
-| 2   | create()  | DTO válido crea entidad                             |
-| 3   | create()  | UUID v4 asignado automáticamente                    |
-| 4   | findAll() | Retorna array de películas                          |
-| 5   | findAll() | Array vacío si no hay datos                         |
-| 6   | findOne() | UUID existente retorna película                     |
-| 7   | findOne() | UUID inexistente lanza NotFoundException            |
-| 8   | update()  | Actualiza campos correctamente                      |
-| 9   | update()  | UUID inexistente lanza excepción antes de modificar |
-| 10  | remove()  | Elimina película existente                          |
-| 11  | remove()  | UUID inexistente lanza excepción antes de eliminar  |
+### Requisitos
+
+- Apache JMeter 5.6.3 instalado ([ver guía](docs/GUIA_HERRAMIENTAS.md))
+- Backend corriendo en `http://localhost:3000`
+- Base de datos sembrada con al menos 5000 películas
+
+### Planes de prueba
+
+Se incluyen 4 planes JMX que corresponden a los escenarios solicitados:
+
+| Archivo | Perfil | Usuarios | Ramp-up | Duración |
+|---------|--------|----------|---------|----------|
+| `jmeter/scripts/smoke.jmx` | Smoke / Baseline | 1 | 1s | 5 loops |
+| `jmeter/scripts/carga.jmx` | Carga (Load) | 50 | 30s | 10 loops |
+| `jmeter/scripts/estres.jmx` | Estrés (Stress) | 100/200/400 | 60s | 2 min c/u |
+| `jmeter/scripts/picos.jmx` | Picos (Spike) | 200 | 5s | 1 loop |
+
+### Preparación
+
+```bash
+# 1. Iniciar el backend
+npm run start:dev
+
+# 2. Sembrar 5000+ películas
+cd jmeter/scripts && node seed.mjs && cd ../..
+
+# 3. Extraer IDs de películas para los tests
+cd jmeter/scripts && node extract-ids.mjs && cd ../..
+```
+
+### Ejecución (modo no-GUI)
+
+Todos los comandos desde la raíz del proyecto:
+
+```bash
+# Smoke Test — verificar que el plan funciona
+jmeter -n -t jmeter/scripts/smoke.jmx \
+  -l jmeter/results/smoke.jtl \
+  -e -o jmeter/results/smoke-dashboard/
+
+# Load Test — 50 usuarios, mezcla GET + POST
+jmeter -n -t jmeter/scripts/carga.jmx \
+  -l jmeter/results/carga.jtl \
+  -e -o jmeter/results/carga-dashboard/
+
+# Stress Test — 3 niveles parametrizados
+# Nivel 1: 100 usuarios
+jmeter -n -t jmeter/scripts/estres.jmx -Jthreads=100 -Jrampup=30 -Jduration=120 \
+  -l jmeter/results/estres-100.jtl \
+  -e -o jmeter/results/estres-100-dashboard/
+
+# Nivel 2: 200 usuarios
+jmeter -n -t jmeter/scripts/estres.jmx -Jthreads=200 -Jrampup=60 -Jduration=120 \
+  -l jmeter/results/estres-200.jtl \
+  -e -o jmeter/results/estres-200-dashboard/
+
+# Nivel 3: 400 usuarios
+jmeter -n -t jmeter/scripts/estres.jmx -Jthreads=400 -Jrampup=120 -Jduration=120 \
+  -l jmeter/results/estres-400.jtl \
+  -e -o jmeter/results/estres-400-dashboard/
+
+# Spike Test — 200 usuarios en 5s con aserciones
+jmeter -n -t jmeter/scripts/picos.jmx \
+  -l jmeter/results/picos.jtl \
+  -e -o jmeter/results/picos-dashboard/
+```
+
+### Estructura de resultados
+
+```
+jmeter/results/
+├── smoke.jtl / smoke-dashboard/     # Smoke Test
+├── carga.jtl / carga-dashboard/     # Load Test
+├── estres-100.jtl / estres-100-dashboard/  # Stress 100
+├── estres-200.jtl / estres-200-dashboard/  # Stress 200
+├── estres-400.jtl / estres-400-dashboard/  # Stress 400
+└── picos.jtl / picos-dashboard/     # Spike Test
+```
+
+Cada dashboard HTML se abre con `jmeter/results/<nombre>/index.html` en el navegador.
+
+### Documentación relacionada
+
+- `docs/PRUEBAS_RENDIMIENTO.md` — Guía detallada de perfiles y análisis
+- `docs/GUIA_HERRAMIENTAS.md` — Instalación y configuración de JMeter + Cypress
+- `docs/GUIA_JMETER.md` — Referencia del plan de pruebas
+- `docs/GUIA_JMETER_GUI.md` — Cómo usar la interfaz gráfica
+- `docs/GUIA_HERRAMIENTAS.md` — Solución de problemas comunes
 
 ## Estructura del proyecto
 

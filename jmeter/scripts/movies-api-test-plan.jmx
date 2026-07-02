@@ -65,7 +65,7 @@
       <hashTree/>
 
       <!-- Random Variable -->
-      <RandomVariableConfig guiclass="RandomVariableConfigGui" testclass="RandomVariableConfig" testname="Random Title Suffix">
+      <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random Title Suffix">
         <stringProp name="variableName">RND_TITLE</stringProp>
         <stringProp name="minimumValue">100000</stringProp>
         <stringProp name="maximumValue">999999</stringProp>
